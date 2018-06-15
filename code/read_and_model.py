@@ -43,8 +43,8 @@ if __name__ == '__main__':
     t0['home.dest'] = t0['home.dest'].fillna('NA')
     t0 = t0.dropna()
     processed_df = preprocess_titanic_df(t0)
-
-    for target_column in ['embarked', 'pclass', 'survived', 'sex']:
+    target_columns = ['embarked', 'pclass', 'survived', 'sex']
+    for target_column in target_columns:
         X = processed_df.drop([target_column], axis=1).values
         y = processed_df[target_column].values
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
