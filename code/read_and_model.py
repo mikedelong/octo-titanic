@@ -1,8 +1,8 @@
 # https://blog.socialcops.com/engineering/machine-learning-python/
 import logging
-import time
 
 import pandas as pd
+import time
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 from sklearn.tree import DecisionTreeClassifier
@@ -46,6 +46,16 @@ if __name__ == '__main__':
     target_columns = ['embarked', 'pclass', 'survived', 'sex']
     for target_column in target_columns:
         X = processed_df.drop([target_column], axis=1).values
+        y = processed_df[target_column].values
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+        clf_dt = DecisionTreeClassifier(max_depth=10)
+
+        clf_dt.fit(X_train, y_train)
+        logger.debug('target: %s score: %.4f' % (target_column, clf_dt.score(X_test, y_test)))
+
+    # instead try dropping all of the target columns and then predict each of them
+    X = processed_df.drop(target_columns, axis=1).values
+    for target_column in target_columns:
         y = processed_df[target_column].values
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
         clf_dt = DecisionTreeClassifier(max_depth=10)
